@@ -1,0 +1,11 @@
+#Flask == 0.11.1
+Flask
+gevent
+gunicorn
+keras==2.2.4
+#base64
+numpy
+h5py
+pillow
+tensorflow==1.6.0
+#https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.11.0-cp27-none-linux_x86_64.whl
