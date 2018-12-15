@@ -1,0 +1,272 @@
+###############
+# testing it - using conda environment
+###############
+# Navigate to the project folder 
+cmd on C:\Users\User\Documents\GIT\Keras-Serve-Asbestos\gcloud deploy
+
+
+# Install the conda environment ('testing') and activate it 
+conda create --name testing python=3.5 pip numpy (or pythnon=2.7 if relevant) 
+activate testing ('deactivate' to cancel out)
+
+# To remove environment 
+conda env remove -n testing
+
+# install a few other packages that is specific on this environment 
+pip install gunicorn
+conda install --yes --file requirements.txt
+set "KERAS_BACKEND=tensorflow"
+
+# error occured. Seems like we need to upgrade tensorflow to 1.12.0
+pip install matplotlib
+pip install --upgrade tensorflow   
+
+# Test it - make sure to change the port on the app.py file to "localhost"
+python app.py 
+
+###############
+# Google cloud tutorial 
+###############
+# Tutorial - https://console.cloud.google.com/appengine/start?project=hello-world-223803&walkthrough_tutorial_id=python_gae_quickstart
+
+# lets get into the GCP shell 
+Open Google Cloud Shell terminal 
+
+# Lets make a sandpit 
+Before doing this, check that you are in the correct project area in GCP. FOr this case its the 'Hello_world helical-sled-221702'
+mkdir GCP_Test
+cd GCP_Test
+
+git clone \
+    https://github.com/GoogleCloudPlatform/python-docs-samples
+
+git pull origin master	
+
+# The tutorial says we need to get into this part of the folder:
+cd python-docs-samples/appengine/standard_python37/hello_world
+	
+cat main.py
+cat app.yaml
+
+# Create the virtualenv for this folder - Hello_world
+virtualenv --python python3 \
+    ~/envs/hello_world
+
+# now Actiivate the virtualenv
+source \
+    ~/envs/hello_world/bin/activate
+
+# Lets install the dependencies 
+pip install -r requirements.txt
+
+# Test run the app 
+python main.py
+
+# Now deploy it 
+gcloud app create
+gcloud app deploy app.yaml --project \
+    helical-sled-221702
+	
+http://helical-sled-221702.appspot.com/
+
+############################################
+# Now Deploy an example deep learning model 
+############################################
+# Create a space for testing 
+mkdir GCP Test
+cd GCP Test
+
+# Now clone a project 
+git clone https://github.com/ejlok1/Keras-Serve-Digit.git
+
+
+# Now go to the project folder 
+cd digit-recognizer-flask-cnn
+
+# manually add on git the app.yaml file. This is really just for deployment 
+# Follow this guide - https://cloud.google.com/appengine/docs/flexible/python/quickstart
+	runtime: python
+	env: flex
+	entrypoint: gunicorn -b :$PORT main:app
+
+	runtime_config:
+	  python_version: 3
+
+	# This sample incurs costs to run on the App Engine flexible environment. 
+	# The settings below are to reduce costs during testing and are not appropriate
+	# for production use. For more information, see:
+	# https://cloud.google.com/appengine/docs/flexible/python/configuring-your-app-with-app-yaml
+	manual_scaling:
+	  instances: 1
+	resources:
+	  cpu: 1
+	  memory_gb: 0.5
+	  disk_size_gb: 10
+
+
+# Make sure its updated 
+git pull origin master	
+(to remove a folder just do 'rm -rf digit-recognizer-flask-cnn')
+
+# Check out the files quickly 
+cat app.py
+cat app.yaml
+
+# Make the environment 
+virtualenv --python python2 ~/envs/GCP_Test/digit-recognizer-flask-cnn
+source ~/envs/GCP_Test/digit-recognizer-flask-cnn/bin/activate   # This needs to be run everytime you relogin, as this is the environment 
+
+# install all the necessary packages 
+pip install -r requirements.txt  # pip install tensorflow --upgrade
+
+# Before deploy the app, test it on GCP terminal 
+python app.py   # Make sure you're in the correct area ie. (digit-recognizer-flask-cnn) ejlok1@cloudshell:~/GCP_Test/digit-recognizer-flask-cnn (hello-world-223803)$
+# when running this first time, there was an error due to tensorflow version. But because the cloud version can't do pip install, i've had to change the requirements.txt file
+
+# create and deploy the app -- https://cloud.google.com/appengine/docs/flexible/python/quickstart
+gcloud app create
+gcloud app deploy app.yaml --project hello-world-223803 
+
+gcloud app browse
+	
+https://hello-world-223803.appspot.com/
+
+
+############################################
+# Digit Recogniser  
+############################################
+
+# In GCP create a new project 
+
+# Enter the GCP console. Some basic unix commands
+ls 
+cd .. 
+http://cheatsheetworld.com/programming/unix-linux-cheat-sheet/
+
+# Create the project
+mkdir Asbestos-Detector
+cd Asbestos-Detector
+
+# Now clone a project  
+git clone https://github.com/ejlok1/Keras-Serve-Asbestos.git
+
+# Enter the main folder
+cd Keras-Serve-Asbestos
+
+# manually add on git the app.yaml file. This is really just for deployment 
+# Follow this guide - https://cloud.google.com/appengine/docs/flexible/python/quickstart
+	runtime: python
+	env: flex
+	entrypoint: gunicorn -b :$PORT app:app   
+
+	runtime_config:
+	  python_version: 3
+
+	# This sample incurs costs to run on the App Engine flexible environment. 
+	# The settings below are to reduce costs during testing and are not appropriate
+	# for production use. For more information, see:
+	# https://cloud.google.com/appengine/docs/flexible/python/configuring-your-app-with-app-yaml
+	manual_scaling:
+	  instances: 1
+	resources:
+	  cpu: 1
+	  memory_gb: 0.5
+	  disk_size_gb: 10
+
+	  
+# Once the app.yaml file is pushed to the GIT Repo... 
+git pull origin-master
+
+# Make the environment 
+virtualenv --python python3 ~/envs/Asbestos-Detector/Keras-Serve-Asbestos  
+source ~/envs/Asbestos-Detector/Keras-Serve-Asbestos/bin/activate   # This needs to be run everytime you relogin, as this is the environment 
+
+# install all the necessary packages 
+pip install -r requirements.txt  # pip install tensorflow --upgrade
+here's a breakdown of what is being installed, copied from the console
+'''
+Collecting Flask (from -r requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/7f/e7/08578774ed4536d3242b14dacb4696386634607af824ea997202cd0edb4b/Flask-1.0.2-py2.py3-none-any.whl
+Collecting gevent (from -r requirements.txt (line 3))
+  Using cached https://files.pythonhosted.org/packages/87/c4/9afb40b4a8b9186787d477aa6ebcfa17ead40ecbf83d5a1ed53dadd4f6ef/gevent-1.3.7-cp35-cp35m-manylinux1_x86_64.whl
+Collecting gunicorn (from -r requirements.txt (line 4))
+  Using cached https://files.pythonhosted.org/packages/8c/da/b8dd8deb741bff556db53902d4706774c8e1e67265f69528c14c003644e6/gunicorn-19.9.0-py2.py3-none-any.whl
+Collecting keras==2.2.4 (from -r requirements.txt (line 5))
+  Using cached https://files.pythonhosted.org/packages/5e/10/aa32dad071ce52b5502266b5c659451cfd6ffcbf14e6c8c4f16c0ff5aaab/Keras-2.2.4-py2.py3-none-any.whl
+Collecting numpy (from -r requirements.txt (line 7))
+Using cached https://files.pythonhosted.org/packages/86/04/bd774106ae0ae1ada68c67efe89f1a16b2aa373cc2db15d974002a9f136d/numpy-1.15.4-cp35-cp35m-manylinux1_x86_64.whl
+Collecting h5py (from -r requirements.txt (line 8))
+  Using cached https://files.pythonhosted.org/packages/d9/0a/f0dd6d533d6b5bd4c1ca186af2792186885a90b84df41f3e6867466761fc/h5py-2.8.0-cp35-cp35m-manylinux1_x86_64.whl
+Collecting pillow (from -r requirements.txt (line 9))
+  Using cached https://files.pythonhosted.org/packages/bc/cc/b6e47b0075ca4267855d77850af7ea4194d2fc591664f1d70e5151b50637/Pillow-5.3.0-cp35-cp35m-manylinux1_x86_64.whl
+Collecting matplotlib (from -r requirements.txt (line 10))
+  Downloading https://files.pythonhosted.org/packages/ad/4c/0415f15f96864c3a2242b1c74041a806c100c1b21741206c5d87684437c6/matplotlib-3.0.2-cp35-cp35m-manylinux1_x86_64.whl (12.9MB)
+    100% |████████████████████████████████| 12.9MB 1.5MB/s
+Collecting tensorflow==1.6.0 (from -r requirements.txt (line 11))
+  Using cached https://files.pythonhosted.org/packages/ba/12/e4266266712053b6e74057c123d10913f422059d4265c82a43e85766aa65/tensorflow-1.6.0-cp35-cp35m-manylinux1_x86_64.whl
+Collecting Jinja2>=2.10 (from Flask->-r requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/7f/ff/ae64bacdfc95f27a016a7bed8e8686763ba4d277a78ca76f32659220a731/Jinja2-2.10-py2.py3-none-any.whl
+Collecting click>=5.1 (from Flask->-r requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/fa/37/45185cb5abbc30d7257104c434fe0b07e5a195a6847506c074527aa599ec/Click-7.0-py2.py3-none-any.whl
+Collecting itsdangerous>=0.24 (from Flask->-r requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/76/ae/44b03b253d6fade317f32c24d100b3b35c2239807046a4c953c7b89fa49e/itsdangerous-1.1.0-py2.py3-none-any.whl
+Collecting Werkzeug>=0.14 (from Flask->-r requirements.txt (line 2))
+  Using cached https://files.pythonhosted.org/packages/20/c4/12e3e56473e52375aa29c4764e70d1b8f3efa6682bef8d0aae04fe335243/Werkzeug-0.14.1-py2.py3-none-any.whl
+Collecting greenlet>=0.4.14; platform_python_implementation == "CPython" (from gevent->-r requirements.txt (line 3))
+  Using cached https://files.pythonhosted.org/packages/2e/65/27f35497cc0102a792390d056e793e064da95fc9eae45d75ae0ba49c0a0d/greenlet-0.4.15-cp35-cp35m-manylinux1_x86_64.whl
+Collecting keras-preprocessing>=1.0.5 (from keras==2.2.4->-r requirements.txt (line 5))
+  Using cached https://files.pythonhosted.org/packages/fc/94/74e0fa783d3fc07e41715973435dd051ca89c550881b3454233c39c73e69/Keras_Preprocessing-1.0.5-py2.py3-none-any.whl
+Collecting six>=1.9.0 (from keras==2.2.4->-r requirements.txt (line 5))
+  Downloading https://files.pythonhosted.org/packages/73/fb/00a976f728d0d1fecfe898238ce23f502a721c0ac0ecfedb80e0d88c64e9/six-1.12.0-py2.py3-none-any.whl
+Collecting keras-applications>=1.0.6 (from keras==2.2.4->-r requirements.txt (line 5))
+  Using cached https://files.pythonhosted.org/packages/3f/c4/2ff40221029f7098d58f8d7fb99b97e8100f3293f9856f0fb5834bef100b/Keras_Applications-1.0.6-py2.py3-none-any.whl
+Collecting pyyaml (from keras==2.2.4->-r requirements.txt (line 5))
+Collecting scipy>=0.14 (from keras==2.2.4->-r requirements.txt (line 5))
+  Using cached https://files.pythonhosted.org/packages/cd/32/5196b64476bd41d596a8aba43506e2403e019c90e1a3dfc21d51b83db5a6/scipy-1.1.0-cp35-cp35m-manylinux1_x86_64.whl
+Collecting kiwisolver>=1.0.1 (from matplotlib->-r requirements.txt (line 10))
+  Downloading https://files.pythonhosted.org/packages/7e/31/d6fedd4fb2c94755cd101191e581af30e1650ccce7a35bddb7930fed6574/kiwisolver-1.0.1-cp35-cp35m-manylinux1_x86_64.whl (949kB)
+    100% |████████████████████████████████| 952kB 15.9MB/s
+Collecting python-dateutil>=2.1 (from matplotlib->-r requirements.txt (line 10))
+  Downloading https://files.pythonhosted.org/packages/74/68/d87d9b36af36f44254a8d512cbfc48369103a3b9e474be9bdfe536abfc45/python_dateutil-2.7.5-py2.py3-none-any.whl (225kB)
+    100% |████████████████████████████████| 235kB 19.5MB/s
+Collecting cycler>=0.10 (from matplotlib->-r requirements.txt (line 10))
+  Downloading https://files.pythonhosted.org/packages/f7/d2/e07d3ebb2bd7af696440ce7e754c59dd546ffe1bbe732c8ab68b9c834e61/cycler-0.10.0-py2.py3-none-any.whl
+Collecting pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 (from matplotlib->-r requirements.txt (line 10))
+  Downloading https://files.pythonhosted.org/packages/71/e8/6777f6624681c8b9701a8a0a5654f3eb56919a01a78e12bf3c73f5a3c714/pyparsing-2.3.0-py2.py3-none-any.whl (59kB)
+    100% |████████████████████████████████| 61kB 15.4MB/s
+Collecting protobuf>=3.4.0 (from tensorflow==1.6.0->-r requirements.txt (line 11))
+  Using cached https://files.pythonhosted.org/packages/bf/d4/db7296a1407cad69f043537ba1e05afab3646451a066ead7a314d8714388/protobuf-3.6.1-cp35-cp35m-manylinux1_x86_64.whl
+Requirement already satisfied: wheel>=0.26 in /home/ejlok1/envs/Asbestos-Detector/Keras-Serve-Asbestos/lib/python3.5/site-packages (from tensorflow==1.6.0->-r requirements.txt (line 11)) (0.32.3)
+Collecting absl-py>=0.1.6 (from tensorflow==1.6.0->-r requirements.txt (line 11))
+Collecting astor>=0.6.0 (from tensorflow==1.6.0->-r requirements.txt (line 11))
+  Using cached https://files.pythonhosted.org/packages/35/6b/11530768cac581a12952a2aad00e1526b89d242d0b9f59534ef6e6a1752f/astor-0.7.1-py2.py3-none-any.whl
+Collecting termcolor>=1.1.0 (from tensorflow==1.6.0->-r requirements.txt (line 11))
+Collecting gast>=0.2.0 (from tensorflow==1.6.0->-r requirements.txt (line 11))
+Collecting tensorboard<1.7.0,>=1.6.0 (from tensorflow==1.6.0->-r requirements.txt (line 11))
+  Using cached https://files.pythonhosted.org/packages/b0/67/a8c91665987d359211dcdca5c8b2a7c1e0876eb0702a4383c1e4ff76228d/tensorboard-1.6.0-py3-none-any.whl
+Collecting MarkupSafe>=0.23 (from Jinja2>=2.10->Flask->-r requirements.txt (line 2))
+Using cached https://files.pythonhosted.org/packages/3e/a5/e188980ef1d0a4e0788b5143ea933f9afd760df38fec4c0b72b5ae3060c8/MarkupSafe-1.1.0-cp35-cp35m-manylinux1_x86_64.whl
+Requirement already satisfied: setuptools in /home/ejlok1/envs/Asbestos-Detector/Keras-Serve-Asbestos/lib/python3.5/site-packages (from kiwisolver>=1.0.1->matplotlib->-r requirements.txt (line 10)) (40.6.3)
+Collecting html5lib==0.9999999 (from tensorboard<1.7.0,>=1.6.0->tensorflow==1.6.0->-r requirements.txt (line 11))
+Collecting bleach==1.5.0 (from tensorboard<1.7.0,>=1.6.0->tensorflow==1.6.0->-r requirements.txt (line 11))
+  Using cached https://files.pythonhosted.org/packages/33/70/86c5fec937ea4964184d4d6c4f0b9551564f821e1c3575907639036d9b90/bleach-1.5.0-py2.py3-none-any.whl
+Collecting markdown>=2.6.8 (from tensorboard<1.7.0,>=1.6.0->tensorflow==1.6.0->-r requirements.txt (line 11))
+  Using cached https://files.pythonhosted.org/packages/7a/6b/5600647404ba15545ec37d2f7f58844d690baf2f81f3a60b862e48f29287/Markdown-3.0.1-py2.py3-none-any.whl
+Installing collected packages: MarkupSafe, Jinja2, click, itsdangerous, Werkzeug, Flask, greenlet, gevent, gunicorn, six, numpy, keras-preprocessing, h5py, keras-applications, pyyaml, scipy, keras, pillow, kiwisolver, python-dateutil, cycler, pyparsing, matplotlib, grpcio, protobuf, absl-py, astor, termcolor, gast, html5lib, bleach, markdown, tensorboard, tensorflow
+Successfully installed Flask-1.0.2 Jinja2-2.10 MarkupSafe-1.1.0 Werkzeug-0.14.1 absl-py-0.6.1 astor-0.7.1 bleach-1.5.0 click-7.0 cycler-0.10.0 gast-0.2.0 gevent-1.3.7 greenlet-0.4.15 grpcio-1.17.1 gunicorn-19.9.0 h5py-2.8.0 html5lib-0.9999999 itsdangerous-1.1.0 keras-2.2.4 keras-applications-1.0.6 keras-preprocessing-1.0.5 kiwisolver-1.0.1 markdown-3.0.1 matplotlib-3.0.2 numpy-1.15.4 pillow-5.3.0 protobuf-3.6.1 pyparsing-2.3.0 python-dateutil-2.7.5 pyyaml-3.13 scipy-1.1.0 six-1.12.0 tensorboard-1.6.0 tensorflow-1.6.0 termcolor-1.1.0  
+'''
+
+# Before deploy the app, test it on GCP terminal 
+python app.py   # Make sure you're in the correct area ie. ~/Asbestos-Detector/Keras-Serve-Asbestos  
+
+# Test to make sure it works 
+https://5000-dot-4774899-dot-devshell.appspot.com/
+https://5000-dot-4774899-dot-devshell.appspot.com/gallery
+
+CTRL+c to quit
+
+# Now time to deploy!
+gcloud app create
+gcloud app deploy app.yaml --project keras-serve-asbestos
+
+# The weblink
