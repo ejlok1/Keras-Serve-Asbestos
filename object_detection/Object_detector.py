@@ -19,8 +19,8 @@ import matplotlib.pyplot as plt
 
 #from pylab import * 
 from PIL import Image
-from utils import label_map_util
-from utils import visualization_utils as vis_util
+from object_detection.utils import label_map_util
+from object_detection.utils import visualization_utils as vis_util
 
 # What model to download.
 MODEL_NAME = 'Asbestos'
