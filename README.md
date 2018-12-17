@@ -4,7 +4,7 @@
 ## Overview
 The original project is based [this](https://github.com/ejlok1/Keras-Serve-Digit) which I extended on after a successful prototype. Basically I'm deploying the Asbestos Rooftop Detector that is built on the  Deep Learning model architecture, using the [tensorflow](https://github.com/tensorflow/tensorflow) framework. We wrap the whole model into a Webapp using the [Flask](http://flask.pocoo.org/) Micro Framework. And in GCP i'm using ComputeEngine which is easy to deploy even without using a container (Docker)
 
-After testing in locally, we go to Google Cloud, activate the ComputeEngine App and host / serve up our solution! The website is [here](https://https://keras-serve-asbestos.appspot.com)
+After testing in locally, we go to Google Cloud, activate the ComputeEngine App and host / serve up our solution! The website is [here](https://keras-serve-asbestos.appspot.com)
 
 
 ## Dependencies
@@ -31,7 +31,7 @@ It's serving a saved Keras model to you via Flask. On the web browser the addres
 thou you need to change it on the app.py file. 
 
 ## Google Cloud hosting 
-Select the Compute Engine solution, implement our model on an environement using the Google terminal. Here's a quick [guide](https://cloud.google.com/appengine/docs/flexible/python/quickstart) Then deploy! The live [website](https://https://keras-serve-asbestos.appspot.com) to load the file, and get the [outputs](https://keras-serve-asbestos.appspot.com/gallery) 
+Select the Compute Engine solution, implement our model on an environement using the Google terminal. Here's a quick [guide](https://cloud.google.com/appengine/docs/flexible/python/quickstart) Then deploy! The live [website](https://keras-serve-asbestos.appspot.com) to load the file, and get the [outputs](https://keras-serve-asbestos.appspot.com/gallery) 
 
 
 ## Credits
